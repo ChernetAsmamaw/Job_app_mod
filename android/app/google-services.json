@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1096590455640",
+    "project_id": "job-portal-app-fc91a",
+    "storage_bucket": "job-portal-app-fc91a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1096590455640:android:5e520a2b9ca70097e3eb2d",
+        "android_client_info": {
+          "package_name": "com.example.food_delivery_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB4ZTVtOmgepj1n9VrVURmuPNLTDpEZb3Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
