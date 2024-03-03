@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../pages/job_details_page.dart';
 
 class JobCard extends StatelessWidget {
   final String companyName;
