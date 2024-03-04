@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import '../components/job_search_bar.dart';
 import '../components/job_card.dart';
 import 'post_page.dart';
-import 'job_details_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});

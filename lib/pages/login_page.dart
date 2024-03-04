@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:job_application_portal/services/auth_service.dart';
 import '../components/my_textfield.dart';
 import '../components/my_button.dart';
 import '../components/my_signup_button.dart';
@@ -166,7 +167,7 @@ class _LoginPageState extends State<LoginPage> {
 
                 const SizedBox(height: 5),
 
-                const Padding(
+                Padding(
                   padding: EdgeInsets.symmetric(
                     horizontal: 2.0,
                     vertical: 8.0,
@@ -175,12 +176,16 @@ class _LoginPageState extends State<LoginPage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       MyButtonWithImg(
-                          buttonName: "Sign Up with Google",
-                          imagePath: "lib/images/google_logo.webp"),
+                        onTap: () => AuthService().signInWithGoogle(),
+                        buttonName: "Sign Up with Google",
+                        imagePath: "lib/images/google_logo.webp",
+                      ),
                       SizedBox(height: 16.0),
                       MyButtonWithImg(
-                          buttonName: "Sign Up with Apple",
-                          imagePath: "lib/images/apple_logo.webp"),
+                        onTap: () {},
+                        buttonName: "Sign Up with Apple",
+                        imagePath: "lib/images/apple_logo.webp",
+                      ),
                     ],
                   ),
                 ),

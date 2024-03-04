@@ -1,20 +1,15 @@
 import 'package:flutter/material.dart';
 
-class JobDetailsPage extends StatefulWidget {
+class JobDetailsPage extends StatelessWidget {
   final Map<String, dynamic> job;
 
   JobDetailsPage({required this.job});
 
   @override
-  State<JobDetailsPage> createState() => _JobDetailsPageState();
-}
-
-class _JobDetailsPageState extends State<JobDetailsPage> {
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.job['title']),
+        title: Text(job['title']),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
@@ -29,7 +24,7 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
               ),
             ),
             Text(
-              widget.job['title'],
+              job['title'],
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
@@ -44,7 +39,7 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
               ),
             ),
             Text(
-              widget.job['companyName'],
+              job['companyName'],
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
@@ -59,7 +54,7 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
               ),
             ),
             Text(
-              widget.job['location'],
+              job['location'],
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
@@ -74,7 +69,7 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
               ),
             ),
             Text(
-              widget.job['description'],
+              job['description'],
               style: TextStyle(
                 fontSize: 18,
               ),
@@ -92,7 +87,7 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
               height: 200,
               decoration: BoxDecoration(
                 image: DecorationImage(
-                  image: AssetImage(widget.job['imageUrl']),
+                  image: AssetImage(job['imageUrl']),
                   fit: BoxFit.cover,
                 ),
               ),

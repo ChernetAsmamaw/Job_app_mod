@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../components/my_textfield.dart';
 import '../components/my_button.dart';
 import '../components/my_signup_button.dart';
+import 'package:job_application_portal/services/auth_service.dart';
 
 class RegisterPage extends StatefulWidget {
   final Function()? onTap;
@@ -177,7 +178,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
                 const SizedBox(height: 5),
 
-                const Padding(
+                Padding(
                   padding: EdgeInsets.symmetric(
                     horizontal: 2.0,
                     vertical: 8.0,
@@ -186,10 +187,12 @@ class _RegisterPageState extends State<RegisterPage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       MyButtonWithImg(
+                          onTap: () => AuthService().signInWithGoogle(),
                           buttonName: "Sign Up with Google",
                           imagePath: "lib/images/google_logo.webp"),
                       SizedBox(height: 16.0),
                       MyButtonWithImg(
+                          onTap: () {},
                           buttonName: "Sign Up with Apple",
                           imagePath: "lib/images/apple_logo.webp"),
                     ],
