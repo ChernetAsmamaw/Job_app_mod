@@ -54,7 +54,7 @@ class _HomePageState extends State<HomePage> {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) => PostPage(),
+            builder: (context) => PostPage(user: FirebaseAuth.instance.currentUser!),
           ),
         );
         break;

@@ -1,20 +1,50 @@
-import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'home_page.dart';
+import 'package:flutter/material.dart';
+import 'package:job_application_portal/models/post.dart';
 
 class PostPage extends StatefulWidget {
-  const PostPage({Key? key}) : super(key: key);
+  final User user;
+
+  const PostPage({Key? key, required this.user}) : super(key: key);
 
   @override
   _PostPageState createState() => _PostPageState();
 }
-
 class _PostPageState extends State<PostPage> {
-  final user = FirebaseAuth.instance.currentUser!;
+  final _formKey = GlobalKey<FormState>();
+  final _titleController = TextEditingController();
+  final _companyNameController = TextEditingController();
+  final _locationController = TextEditingController();
+  final _descriptionController = TextEditingController();
+  final _imageUrlController = TextEditingController();
 
-  // Function to sign a user out
-  signUserOut() {
-    FirebaseAuth.instance.signOut();
+  @override
+  void dispose() {
+    _titleController.dispose();
+    _companyNameController.dispose();
+    _locationController.dispose();
+    _descriptionController.dispose();
+    _imageUrlController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _addPost() async {
+    final isValid = _formKey.currentState?.validate() ?? false;
+    if (!isValid) return;
+    final post = Post(
+      title: _titleController.text,
+      companyName: _companyNameController.text,
+      location: _locationController.text,
+      description: _descriptionController.text,
+      imageUrl: _imageUrlController.text, id: '',
+    );
+    await FirebaseFirestore.instance.collection('posts').add(post.toMap());
+    _formKey.currentState?.reset();
+  }
+
+  Future<void> _signUserOut() async {
+    await FirebaseAuth.instance.signOut();
   }
 
   @override
@@ -24,7 +54,7 @@ class _PostPageState extends State<PostPage> {
         backgroundColor: Colors.grey[100],
         toolbarHeight: 50,
         title: Text(
-          'Welcome ' + user.email!,
+          'Welcome ' + widget.user.email!,
           style: TextStyle(
             color: Colors.blueGrey[800],
             fontFamily: 'Poppins',
@@ -34,7 +64,7 @@ class _PostPageState extends State<PostPage> {
         ),
         actions: [
           IconButton(
-            onPressed: signUserOut,
+            onPressed: _signUserOut,
             icon: Icon(
               Icons.logout_outlined,
               size: 30,
@@ -44,140 +74,140 @@ class _PostPageState extends State<PostPage> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Post Jobs!',
-              style: TextStyle(
-                  color: Colors.blueGrey[600],
-                  fontFamily: 'Poppins',
-                  fontSize: 24.0,
-                  fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 30.0),
-            Text(
-              'Title:',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
+        child: Form(
+          key: _formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Post Jobs!',
+                style: TextStyle(
+                    color: Colors.blueGrey[600],
+                    fontFamily: 'Poppins',
+                    fontSize: 24.0,
+                    fontWeight: FontWeight.bold),
               ),
-            ),
-            TextField(
-              decoration: InputDecoration(
-                hintText: 'Enter post title here',
+              SizedBox(height: 30.0),
+              Text(
+                'Title:',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-            ),
-            SizedBox(height: 16),
-            Text(
-              'Company Name:',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
+              TextFormField(
+                controller: _titleController,
+                decoration: InputDecoration(
+                  hintText: 'Enter post title here',
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter a title';
+                  }
+                  return null;
+                },
               ),
-            ),
-            TextField(
-              decoration: InputDecoration(
-                hintText: 'Enter company name here',
+              SizedBox(height: 16),
+              Text(
+                'Company Name:',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-            ),
-            SizedBox(height: 16),
-            Text(
-              'Location:',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
+              TextFormField(
+                controller: _companyNameController,
+                decoration: InputDecoration(
+                  hintText: 'Enter company name here',
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter a company name';
+                  }
+                  return null;
+                },
               ),
-            ),
-            TextField(
-              decoration: InputDecoration(
-                hintText: 'Enter location here',
+              SizedBox(height: 16),
+              Text(
+                'Location:',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-            ),
-            SizedBox(height: 16),
-            Text(
-              'Description:',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
+              TextFormField(
+                controller: _locationController,
+                decoration: InputDecoration(
+                  hintText: 'Enter location here',
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter a location';
+                  }
+                  return null;
+                },
               ),
-            ),
-            TextField(
-              decoration: InputDecoration(
-                hintText: 'Enter post description here',
+              SizedBox(height: 16),
+              Text(
+                'Description:',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-              maxLines: null,
-            ),
-            SizedBox(height: 16),
-            Text(
-              'Upload Job Image:',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
+              TextFormField(
+                controller: _descriptionController,
+                decoration: InputDecoration(
+                  hintText: 'Enter post description here',
+                ),
+                maxLines: null,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter a description';
+                  }
+                  return null;
+                },
               ),
-            ),
-            SizedBox(height: 10),
-            Container(
-              width: double.infinity,
-              height: 100,
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.grey),
-                borderRadius: BorderRadius.circular(8),
+              SizedBox(height: 16),
+              Text(
+                'Upload Job Image URL:',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-              child: Center(
-                child: Text(
-                  '+ Upload Image',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
+              SizedBox(height: 10),
+              TextFormField(
+                controller: _imageUrlController,
+                decoration: InputDecoration(
+                  hintText: 'Enter image URL here',
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter an image URL';
+                  }
+                  return null;
+                },
+              ),
+              SizedBox(height: 30),
+              Center(
+                child: ElevatedButton(
+                  onPressed: _addPost,
+                  style: ElevatedButton.styleFrom(
+                    padding: EdgeInsets.all(20),
+                    backgroundColor: Colors.blue,
+                    shape:
+                        RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
+                  ),
+                  child: Text(
+                    'Post',
+                    style: TextStyle(fontSize: 20, color: Colors.white),
                   ),
                 ),
               ),
-            ),
-            SizedBox(height: 30),
-            Center(
-              child: ElevatedButton(
-                onPressed: () {},
-                style: ElevatedButton.styleFrom(
-                  padding: EdgeInsets.all(20),
-                  backgroundColor: Colors.blue,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(25),
-                  ),
-                ),
-                child: Text(
-                  'Post',
-                  style: TextStyle(fontSize: 20, color: Colors.white),
-                ),
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.post_add),
-            label: 'Post',
-          ),
-        ],
-        currentIndex: 1,
-        selectedItemColor: Colors.blue,
-        onTap: (index) {
-          if (index == 0) {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => HomePage(),
-              ),
-            );
-          }
-        },
       ),
     );
   }
