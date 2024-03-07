@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:job_application_portal/models/post.dart';
 import 'home_page.dart';
+import 'profile_page.dart';
 
 class PostPage extends StatefulWidget {
   final User user;
@@ -57,7 +58,7 @@ class _PostPageState extends State<PostPage> {
         backgroundColor: Colors.grey[100],
         toolbarHeight: 50,
         title: Text(
-          'Welcome ' + widget.user.email!,
+          'JAB',
           style: TextStyle(
             color: Colors.blueGrey[800],
             fontFamily: 'Poppins',
@@ -202,6 +203,10 @@ class _PostPageState extends State<PostPage> {
             icon: Icon(Icons.post_add),
             label: 'Post',
           ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.contact_page),
+            label: 'Profile',
+          ),
         ],
         currentIndex: 1,
         selectedItemColor: Colors.blue,
@@ -211,6 +216,13 @@ class _PostPageState extends State<PostPage> {
               context,
               MaterialPageRoute(
                 builder: (context) => HomePage(),
+              ),
+            );
+          } else if (index == 2) {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ProfilePage(),
               ),
             );
           }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../pages/job_details_page.dart';
 
 class JobCard extends StatelessWidget {
   final String companyName;
@@ -73,14 +74,17 @@ class JobCard extends StatelessWidget {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10.0),
+                  padding: const EdgeInsets.symmetric(vertical: 15.0),
                   child: ElevatedButton(
                     onPressed: () {
-                      //Navigator.push(
-                      //context,
-                      //MaterialPageRoute(
-                      //builder: (context) => JobDetailsPage(
-                      //job: recentJobs[index]                              ),                        ),                      );
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => JobDetailsPage(
+                            job: this, // Pass the current job object
+                          ),
+                        ),
+                      );
                     },
                     style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all(Colors.blue),

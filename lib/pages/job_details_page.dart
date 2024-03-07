@@ -1,107 +1,62 @@
 import 'package:flutter/material.dart';
+import '../components/job_card.dart';
 
 class JobDetailsPage extends StatelessWidget {
-  final List job;
-  final int index;
+  final JobCard job;
 
-  JobDetailsPage({required this.job, required this.index});
+  JobDetailsPage({required this.job});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(job[index][0]),
+        title: Text('Job Details'),
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
+        padding: EdgeInsets.all(30.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text(
-              'Title:',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
+              job.jobTitle,
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
+            SizedBox(height: 10),
             Text(
-              job[index][0],
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
+              job.companyName,
+              style: TextStyle(fontSize: 18, color: Colors.grey),
             ),
-            SizedBox(height: 16),
+            SizedBox(height: 10),
             Text(
-              'Company Name:',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
+              job.jobLocation,
+              style: TextStyle(fontSize: 16, color: Colors.grey),
             ),
+            SizedBox(height: 10),
+            Image.asset(
+              job.jobImage,
+              width: 300,
+              height: 225,
+            ),
+            SizedBox(height: 10),
             Text(
-              job[index][1],
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
+              job.briefDescription,
+              style: TextStyle(fontSize: 14),
+            ),
+            SizedBox(height: 50),
+            Center(
+              child: ElevatedButton(
+                onPressed: () {
+                  // Add your button action here
+                },
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(Colors.blue),
+                ),
+                child: Text(
+                  'Apply Now',
+                  style: TextStyle(color: Colors.white),
+                ),
               ),
             ),
-            SizedBox(height: 16),
-            Text(
-              'Location:',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            Text(
-              job[index][2],
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            SizedBox(height: 16),
-            Text(
-              'Description:',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            Text(
-              job[index][4],
-              style: TextStyle(
-                fontSize: 18,
-              ),
-            ),
-            SizedBox(height: 16),
-          ],
-        ),
-      ),
-      bottomNavigationBar: BottomAppBar(
-        color: Colors.blue,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            IconButton(
-              icon: Icon(
-                Icons.home,
-                color: Colors.white,
-              ),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
-            Text(
-              'Job Details',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            SizedBox(width: 16),
           ],
         ),
       ),

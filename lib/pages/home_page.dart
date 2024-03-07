@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../components/job_search_bar.dart';
 import '../components/job_card.dart';
 import 'post_page.dart';
+import 'profile_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -36,8 +37,7 @@ class _HomePageState extends State<HomePage> {
       'While building apps with Flutter, several UI/UX design elements collectively make your app more interactive. As the UI of your app defines its future, you should always value making the UI of your app as engaging as you can. This will increase the user retention rate, which is one of the major steps toward your app’s success.',
     ],
   ];
-
-  // Function to navigate to the post page
+// Function to navigate to the post or profile page
   void _onNavigationTapped(int index) {
     switch (index) {
       case 0:
@@ -59,7 +59,14 @@ class _HomePageState extends State<HomePage> {
           ),
         );
         break;
-      default:
+      case 2:
+        // Navigate to the profile page
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ProfilePage(),
+          ),
+        );
         break;
     }
   }
@@ -149,6 +156,10 @@ class _HomePageState extends State<HomePage> {
           BottomNavigationBarItem(
             icon: Icon(Icons.post_add),
             label: 'Post',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.contact_page),
+            label: 'Profile',
           ),
         ],
         currentIndex: _selectedIndex,
