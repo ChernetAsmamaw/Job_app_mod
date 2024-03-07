@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:job_application_portal/models/post.dart';
+import 'home_page.dart';
 
 class PostPage extends StatefulWidget {
   final User user;
@@ -11,6 +12,7 @@ class PostPage extends StatefulWidget {
   @override
   _PostPageState createState() => _PostPageState();
 }
+
 class _PostPageState extends State<PostPage> {
   final _formKey = GlobalKey<FormState>();
   final _titleController = TextEditingController();
@@ -37,7 +39,8 @@ class _PostPageState extends State<PostPage> {
       companyName: _companyNameController.text,
       location: _locationController.text,
       description: _descriptionController.text,
-      imageUrl: _imageUrlController.text, id: '',
+      imageUrl: _imageUrlController.text,
+      id: '',
     );
     await FirebaseFirestore.instance.collection('posts').add(post.toMap());
     _formKey.currentState?.reset();
@@ -168,27 +171,6 @@ class _PostPageState extends State<PostPage> {
                   return null;
                 },
               ),
-              SizedBox(height: 16),
-              Text(
-                'Upload Job Image URL:',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              SizedBox(height: 10),
-              TextFormField(
-                controller: _imageUrlController,
-                decoration: InputDecoration(
-                  hintText: 'Enter image URL here',
-                ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter an image URL';
-                  }
-                  return null;
-                },
-              ),
               SizedBox(height: 30),
               Center(
                 child: ElevatedButton(
@@ -196,8 +178,8 @@ class _PostPageState extends State<PostPage> {
                   style: ElevatedButton.styleFrom(
                     padding: EdgeInsets.all(20),
                     backgroundColor: Colors.blue,
-                    shape:
-                        RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(25)),
                   ),
                   child: Text(
                     'Post',
@@ -208,6 +190,31 @@ class _PostPageState extends State<PostPage> {
             ],
           ),
         ),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.post_add),
+            label: 'Post',
+          ),
+        ],
+        currentIndex: 1,
+        selectedItemColor: Colors.blue,
+        onTap: (index) {
+          if (index == 0) {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => HomePage(),
+              ),
+            );
+          }
+        },
       ),
     );
   }

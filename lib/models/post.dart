@@ -14,7 +14,8 @@ class Post {
     required this.companyName,
     required this.location,
     required this.description,
-    required this.imageUrl, String? userEmail,
+    required this.imageUrl,
+    String? userEmail,
   });
 
   factory Post.fromMap(Map<String, dynamic> data) {

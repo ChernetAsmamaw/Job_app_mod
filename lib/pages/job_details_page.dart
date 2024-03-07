@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 
 class JobDetailsPage extends StatelessWidget {
-  final Map<String, dynamic> job;
+  final List job;
+  final int index;
 
-  JobDetailsPage({required this.job});
+  JobDetailsPage({required this.job, required this.index});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(job['title']),
+        title: Text(job[index][0]),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
@@ -24,7 +25,7 @@ class JobDetailsPage extends StatelessWidget {
               ),
             ),
             Text(
-              job['title'],
+              job[index][0],
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
@@ -39,7 +40,7 @@ class JobDetailsPage extends StatelessWidget {
               ),
             ),
             Text(
-              job['companyName'],
+              job[index][1],
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
@@ -54,7 +55,7 @@ class JobDetailsPage extends StatelessWidget {
               ),
             ),
             Text(
-              job['location'],
+              job[index][2],
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
@@ -69,29 +70,12 @@ class JobDetailsPage extends StatelessWidget {
               ),
             ),
             Text(
-              job['description'],
+              job[index][4],
               style: TextStyle(
                 fontSize: 18,
               ),
             ),
             SizedBox(height: 16),
-            Text(
-              'Upload Job Image:',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            Container(
-              width: double.infinity,
-              height: 200,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage(job['imageUrl']),
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
           ],
         ),
       ),
