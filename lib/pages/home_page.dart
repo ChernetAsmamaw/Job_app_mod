@@ -128,17 +128,21 @@ class _HomePageState extends State<HomePage> {
                   itemCount: snapshot.data!.docs.length,
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (context, index) {
-                    final jobData = snapshot.data!.docs[index].data() as Map<String, dynamic>;
-                    final jobTitle = jobData['jobTitle'] ?? 'Job Title';
+                    final jobData = {
+                      'id': snapshot.data!.docs[index].id,
+                      ...snapshot.data!.docs[index].data() as Map<String, dynamic>,
+                    };
+                    final jobTitle = jobData['title'] ?? 'Job Title';
                     final companyName = jobData['companyName'] ?? 'Company Name';
-                    final jobLocation = jobData['jobLocation'] ?? 'Job Location';
-                    final briefDescription = jobData['briefDescription'] ?? 'Brief Description';
+                    final jobLocation = jobData['location'] ?? 'Job Location';
+                    final briefDescription = jobData['description'] ?? 'Brief Description';
+                    final jobImage = jobData['imageUrl'] ?? 'assets/mobile-gaming1.webp';
 
                     return JobCard(
                       jobTitle: jobTitle,
                       companyName: companyName,
                       jobLocation: jobLocation,
-                      jobImage: 'assets/mobile-gaming1.webp',
+                      jobImage: jobImage, // Use the imageUrl from Firestore
                       briefDescription: briefDescription,
                     );
                   },

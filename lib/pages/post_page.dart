@@ -40,10 +40,12 @@ class _PostPageState extends State<PostPage> {
       companyName: _companyNameController.text,
       location: _locationController.text,
       description: _descriptionController.text,
-      imageUrl: _imageUrlController.text,
-      id: '',
+      imageUrl: 'assets/mobile-gaming1.webp',
+      id: '', // Remove the empty string for the id
     );
-    await FirebaseFirestore.instance.collection('jobs').add(post.toMap());
+    // Add the post data to Firestore and get the document ID
+    final docRef = await FirebaseFirestore.instance.collection('jobs').add(post.toMap());
+    final docId = docRef.id; // Get the document ID
     _formKey.currentState?.reset();
   }
 
