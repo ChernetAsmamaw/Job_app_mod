@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import '../components/job_search_bar.dart';
 import '../components/job_card.dart';
 import 'post_page.dart';
@@ -20,24 +21,7 @@ class _HomePageState extends State<HomePage> {
     FirebaseAuth.instance.signOut();
   }
 
-  // List of info for card
-  final List recentJobs = [
-    [
-      'Software Engineer',
-      'Google RW',
-      'Kigali, Rwanda',
-      'assets/mobile-gaming1.webp',
-      'While building apps with Flutter, several UI/UX design elements collectively make your app more interactive. As the UI of your app defines its future, you should always value making the UI of your app as engaging as you can. This will increase the user retention rate, which is one of the major steps toward your app’s success.',
-    ],
-    [
-      'UI Designer',
-      'Google RW',
-      'Kigali, Rwanda',
-      'assets/mobile-gaming1.webp',
-      'While building apps with Flutter, several UI/UX design elements collectively make your app more interactive. As the UI of your app defines its future, you should always value making the UI of your app as engaging as you can. This will increase the user retention rate, which is one of the major steps toward your app’s success.',
-    ],
-  ];
-// Function to navigate to the post or profile page
+  // Function to navigate to the post or profile page
   void _onNavigationTapped(int index) {
     switch (index) {
       case 0:
@@ -125,22 +109,37 @@ class _HomePageState extends State<HomePage> {
 
           const SizedBox(height: 40),
 
-          Container(
-            height: 420,
-            width: 400,
-            child: ListView.builder(
-              itemCount: recentJobs.length,
-              scrollDirection: Axis.horizontal,
-              itemBuilder: (context, index) {
-                return JobCard(
-                  jobTitle: recentJobs[index][0],
-                  companyName: recentJobs[index][1],
-                  jobLocation: recentJobs[index][2],
-                  jobImage: recentJobs[index][3],
-                  briefDescription: recentJobs[index][4],
-                );
-              },
-            ),
+          // Fetch job listings from Firestore
+          StreamBuilder<QuerySnapshot>(
+            stream: FirebaseFirestore.instance.collection('jobs').snapshots(),
+            builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+              if (snapshot.hasError) {
+                return Text('Something went wrong');
+              }
+
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Center(child: CircularProgressIndicator());
+              }
+
+              return Container(
+                height: 420,
+                width: 400,
+                child: ListView.builder(
+                  itemCount: snapshot.data!.docs.length,
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (context, index) {
+                    final jobData = snapshot.data!.docs[index].data() as Map<String, dynamic>;
+                    return JobCard(
+                      jobTitle: jobData['jobTitle'],
+                      companyName: jobData['companyName'],
+                      jobLocation: jobData['jobLocation'],
+                      jobImage: 'assets/mobile-gaming1.webp', // Replace with your asset image path
+                      briefDescription: jobData['briefDescription'],
+                    );
+                  },
+                ),
+              );
+            },
           ),
         ],
       ),

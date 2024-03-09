@@ -43,7 +43,7 @@ class _PostPageState extends State<PostPage> {
       imageUrl: _imageUrlController.text,
       id: '',
     );
-    await FirebaseFirestore.instance.collection('posts').add(post.toMap());
+    await FirebaseFirestore.instance.collection('jobs').add(post.toMap());
     _formKey.currentState?.reset();
   }
 

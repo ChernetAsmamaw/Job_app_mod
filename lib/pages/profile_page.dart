@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:job_application_portal/models/profile.dart';
+import 'package:job_application_portal/services/user_profile_service.dart';
 
 import 'post_page.dart';
 import 'home_page.dart';
@@ -10,16 +13,81 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  String _fullName = 'John Doe';
-  String _education = 'Undergraduate';
-  String _location = 'New York';
-  int _experience = 2;
+  UserProfile? _userProfile;
+  final UserProfileService _userProfileService = UserProfileService();
 
-  int _selectedIndex = 0;
-  void _onNavigationTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
+  String _fullName = '';
+  String _education = '';
+  String _location = '';
+  int _experience = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserProfile();
+  }
+
+  Future<void> _loadUserProfile() async {
+    // Load user profile from Firestore or initialize a new one
+    final userId = FirebaseAuth.instance.currentUser?.uid;
+    if (userId != null) {
+      final snapshot =
+          await FirebaseFirestore.instance.collection('profiles').doc(userId).get();
+      if (snapshot.exists) {
+        final data = snapshot.data() as Map<String, dynamic>;
+        _userProfile = UserProfile.fromJson(data);
+        setState(() {
+          _fullName = _userProfile!.fullName;
+          _education = _userProfile!.education;
+          _location = _userProfile!.location;
+          _experience = _userProfile!.experience;
+        });
+      } else {
+        setState(() {
+          _fullName = '';
+          _education = 'Undergraduate';
+          _location = '';
+          _experience = 0;
+        });
+      }
+    }
+  }
+
+  Future<void> _updateProfile() async {
+    final userId = FirebaseAuth.instance.currentUser?.uid;
+    if (userId != null) {
+      if (_userProfile != null) {
+        // Update existing profile
+        _userProfile!.fullName = _fullName;
+        _userProfile!.education = _education;
+        _userProfile!.location = _location;
+        _userProfile!.experience = _experience;
+        await _userProfileService.updateUserProfile(_userProfile!);
+      } else {
+        // Create new profile
+        final userProfile = UserProfile(
+          fullName: _fullName,
+          education: _education,
+          location: _location,
+          experience: _experience,
+        );
+        await _userProfileService.createUserProfile(userProfile, userId);
+      }
+    }
+  }
+
+  Future<void> _deleteProfile() async {
+    final userId = FirebaseAuth.instance.currentUser?.uid;
+    if (userId != null && _userProfile != null) {
+      await _userProfileService.deleteUserProfile(_userProfile!.id!);
+      setState(() {
+        _userProfile = null;
+        _fullName = '';
+        _education = 'Undergraduate';
+        _location = '';
+        _experience = 0;
+      });
+    }
   }
 
   @override
@@ -39,7 +107,9 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              FirebaseAuth.instance.signOut();
+            },
             icon: Icon(
               Icons.logout_outlined,
               size: 30,
@@ -53,7 +123,7 @@ class _ProfilePageState extends State<ProfilePage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Post Jobs!',
+              'Profile',
               style: TextStyle(
                   color: Colors.blueGrey[600],
                   fontFamily: 'Poppins',
@@ -76,7 +146,7 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
               onChanged: (value) {
                 setState(() {
-                  _location = value;
+                  _fullName = value;
                 });
               },
             ),
@@ -158,7 +228,7 @@ class _ProfilePageState extends State<ProfilePage> {
             SizedBox(height: 50),
             Center(
               child: ElevatedButton(
-                onPressed: () {/*_updateProfile,*/},
+                onPressed: _updateProfile,
                 style: ElevatedButton.styleFrom(
                   padding: EdgeInsets.all(20),
                   backgroundColor: Colors.blue,
@@ -169,6 +239,16 @@ class _ProfilePageState extends State<ProfilePage> {
                   'Update Profile',
                   style: TextStyle(fontSize: 20, color: Colors.white),
                 ),
+              ),
+            ),
+            ElevatedButton(
+              onPressed: _deleteProfile,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.red,
+              ),
+              child: Text(
+                'Delete Profile',
+                style: TextStyle(fontSize: 16, color: Colors.white),
               ),
             ),
           ],
