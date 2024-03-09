@@ -129,12 +129,17 @@ class _HomePageState extends State<HomePage> {
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (context, index) {
                     final jobData = snapshot.data!.docs[index].data() as Map<String, dynamic>;
+                    final jobTitle = jobData['jobTitle'] ?? 'Job Title';
+                    final companyName = jobData['companyName'] ?? 'Company Name';
+                    final jobLocation = jobData['jobLocation'] ?? 'Job Location';
+                    final briefDescription = jobData['briefDescription'] ?? 'Brief Description';
+
                     return JobCard(
-                      jobTitle: jobData['jobTitle'],
-                      companyName: jobData['companyName'],
-                      jobLocation: jobData['jobLocation'],
-                      jobImage: 'assets/mobile-gaming1.webp', // Replace with your asset image path
-                      briefDescription: jobData['briefDescription'],
+                      jobTitle: jobTitle,
+                      companyName: companyName,
+                      jobLocation: jobLocation,
+                      jobImage: 'assets/mobile-gaming1.webp',
+                      briefDescription: briefDescription,
                     );
                   },
                 ),
