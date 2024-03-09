@@ -106,33 +106,8 @@ class JobCard extends StatelessWidget {
                     ),
                   ),
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    if (currentUser?.uid == createdBy)
-                      IconButton(
-                        icon: Icon(Icons.edit),
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => EditJobPage(
-                                job: this,
-                                jobId: jobId,
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                    if (currentUser?.uid == createdBy)
-                      IconButton(
-                        icon: Icon(Icons.delete),
-                        onPressed: () {
-                          deletePost(jobId);
-                        },
-                      ),
-                  ],
-                ),
+                
+                Container(),
               ],
             ),
           ),
