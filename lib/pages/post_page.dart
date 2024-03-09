@@ -35,17 +35,20 @@ class _PostPageState extends State<PostPage> {
   Future<void> _addPost() async {
     final isValid = _formKey.currentState?.validate() ?? false;
     if (!isValid) return;
+
     final post = Post(
       title: _titleController.text,
       companyName: _companyNameController.text,
       location: _locationController.text,
       description: _descriptionController.text,
       imageUrl: 'assets/mobile-gaming1.webp',
-      id: '', // Remove the empty string for the id
+      createdBy: widget.user.uid, // Add the user's ID
     );
+
     // Add the post data to Firestore and get the document ID
     final docRef = await FirebaseFirestore.instance.collection('jobs').add(post.toMap());
     final docId = docRef.id; // Get the document ID
+
     _formKey.currentState?.reset();
   }
 
@@ -109,6 +112,26 @@ class _PostPageState extends State<PostPage> {
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter a title';
+                  }
+                  return null;
+                },
+              ),
+                            SizedBox(height: 30.0),
+              Text(
+                'JobID:',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              TextFormField(
+                controller: _titleController,
+                decoration: InputDecoration(
+                  hintText: 'Enter JobID here',
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter a JobID';
                   }
                   return null;
                 },

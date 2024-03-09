@@ -7,15 +7,16 @@ class Post {
   final String location;
   final String description;
   final String imageUrl;
+  final String createdBy;
 
   Post({
-    required this.id,
+    this.id = '',
     required this.title,
     required this.companyName,
     required this.location,
     required this.description,
     required this.imageUrl,
-    String? userEmail,
+    required this.createdBy,
   });
 
   factory Post.fromMap(Map<String, dynamic> data) {
@@ -26,6 +27,7 @@ class Post {
       location: data['location'] ?? '',
       description: data['description'] ?? '',
       imageUrl: data['imageUrl'] ?? '',
+      createdBy: data['createdBy'] ?? '',
     );
   }
 
@@ -37,6 +39,7 @@ class Post {
       'location': location,
       'description': description,
       'imageUrl': imageUrl,
+      'createdBy': createdBy,
     };
   }
 }

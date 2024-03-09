@@ -16,10 +16,7 @@ class _ProfilePageState extends State<ProfilePage> {
   UserProfile? _userProfile;
   final UserProfileService _userProfileService = UserProfileService();
 
-  String _fullName = '';
-  String _education = '';
-  String _location = '';
-  int _experience = 0;
+  bool _isEditing = false; // Track if the user is editing the profile
 
   @override
   void initState() {
@@ -36,18 +33,10 @@ class _ProfilePageState extends State<ProfilePage> {
       if (snapshot.exists) {
         final data = snapshot.data() as Map<String, dynamic>;
         _userProfile = UserProfile.fromJson(data);
-        setState(() {
-          _fullName = _userProfile!.fullName;
-          _education = _userProfile!.education;
-          _location = _userProfile!.location;
-          _experience = _userProfile!.experience;
-        });
+        setState(() {});
       } else {
         setState(() {
-          _fullName = '';
-          _education = 'Undergraduate';
-          _location = '';
-          _experience = 0;
+          _userProfile = null;
         });
       }
     }
@@ -55,24 +44,11 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Future<void> _updateProfile() async {
     final userId = FirebaseAuth.instance.currentUser?.uid;
-    if (userId != null) {
-      if (_userProfile != null) {
-        // Update existing profile
-        _userProfile!.fullName = _fullName;
-        _userProfile!.education = _education;
-        _userProfile!.location = _location;
-        _userProfile!.experience = _experience;
-        await _userProfileService.updateUserProfile(_userProfile!);
-      } else {
-        // Create new profile
-        final userProfile = UserProfile(
-          fullName: _fullName,
-          education: _education,
-          location: _location,
-          experience: _experience,
-        );
-        await _userProfileService.createUserProfile(userProfile, userId);
-      }
+    if (userId != null && _userProfile != null) {
+      await _userProfileService.updateUserProfile(_userProfile!);
+      setState(() {
+        _isEditing = false;
+      });
     }
   }
 
@@ -82,10 +58,6 @@ class _ProfilePageState extends State<ProfilePage> {
       await _userProfileService.deleteUserProfile(_userProfile!.id!);
       setState(() {
         _userProfile = null;
-        _fullName = '';
-        _education = 'Undergraduate';
-        _location = '';
-        _experience = 0;
       });
     }
   }
@@ -139,17 +111,19 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
             ),
             SizedBox(height: 8),
-            TextFormField(
-              initialValue: _fullName,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
-              ),
-              onChanged: (value) {
-                setState(() {
-                  _fullName = value;
-                });
-              },
-            ),
+            _isEditing
+                ? TextFormField(
+                    initialValue: _userProfile?.fullName,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                    ),
+                    onChanged: (value) {
+                      setState(() {
+                        _userProfile?.fullName = value;
+                      });
+                    },
+                  )
+                : Text(_userProfile?.fullName ?? ''),
             SizedBox(height: 16),
             Text(
               'Education',
@@ -159,31 +133,33 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
             ),
             SizedBox(height: 8),
-            DropdownButtonFormField<String>(
-              value: _education,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
-              ),
-              onChanged: (value) {
-                setState(() {
-                  _education = value!;
-                });
-              },
-              items: [
-                DropdownMenuItem<String>(
-                  value: 'High School',
-                  child: Text('High School'),
-                ),
-                DropdownMenuItem<String>(
-                  value: 'Undergraduate',
-                  child: Text('Undergraduate'),
-                ),
-                DropdownMenuItem<String>(
-                  value: 'Postgraduate',
-                  child: Text('Postgraduate'),
-                ),
-              ],
-            ),
+            _isEditing
+                ? DropdownButtonFormField<String>(
+                    value: _userProfile?.education,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                    ),
+                    onChanged: (value) {
+                      setState(() {
+                        _userProfile?.education = value!;
+                      });
+                    },
+                    items: [
+                      DropdownMenuItem<String>(
+                        value: 'High School',
+                        child: Text('High School'),
+                      ),
+                      DropdownMenuItem<String>(
+                        value: 'Undergraduate',
+                        child: Text('Undergraduate'),
+                      ),
+                      DropdownMenuItem<String>(
+                        value: 'Postgraduate',
+                        child: Text('Postgraduate'),
+                      ),
+                    ],
+                  )
+                : Text(_userProfile?.education ?? ''),
             SizedBox(height: 16),
             Text(
               'Location',
@@ -193,17 +169,19 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
             ),
             SizedBox(height: 8),
-            TextFormField(
-              initialValue: _location,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
-              ),
-              onChanged: (value) {
-                setState(() {
-                  _location = value;
-                });
-              },
-            ),
+            _isEditing
+                ? TextFormField(
+                    initialValue: _userProfile?.location,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                    ),
+                    onChanged: (value) {
+                      setState(() {
+                        _userProfile?.location = value;
+                      });
+                    },
+                  )
+                : Text(_userProfile?.location ?? ''),
             SizedBox(height: 16),
             Text(
               'Experience',
@@ -213,34 +191,56 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
             ),
             SizedBox(height: 8),
-            Slider(
-              value: _experience.toDouble(),
-              min: 0,
-              max: 5,
-              divisions: 5,
-              label: _experience.toString(),
-              onChanged: (value) {
-                setState(() {
-                  _experience = value.round();
-                });
-              },
-            ),
+            _isEditing
+                ? Slider(
+                    value: (_userProfile?.experience ?? 0).toDouble(),
+                    min: 0,
+                    max: 5,
+                    divisions: 5,
+                    label: (_userProfile?.experience ?? 0).toString(),
+                    onChanged: (value) {
+                      setState(() {
+                        _userProfile?.experience = value.round();
+                      });
+                    },
+                  )
+                : Text((_userProfile?.experience ?? 0).toString()),
             SizedBox(height: 50),
-            Center(
-              child: ElevatedButton(
-                onPressed: _updateProfile,
-                style: ElevatedButton.styleFrom(
-                  padding: EdgeInsets.all(20),
-                  backgroundColor: Colors.blue,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(25)),
-                ),
-                child: Text(
-                  'Update Profile',
-                  style: TextStyle(fontSize: 20, color: Colors.white),
-                ),
-              ),
-            ),
+            _isEditing
+                ? Center(
+                    child: ElevatedButton(
+                      onPressed: _updateProfile,
+                      style: ElevatedButton.styleFrom(
+                        padding: EdgeInsets.all(20),
+                        backgroundColor: Colors.blue,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(25)),
+                      ),
+                      child: Text(
+                        'Update Profile',
+                        style: TextStyle(fontSize: 20, color: Colors.white),
+                      ),
+                    ),
+                  )
+                : Center(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        setState(() {
+                          _isEditing = true;
+                        });
+                      },
+                      style: ElevatedButton.styleFrom(
+                        padding: EdgeInsets.all(20),
+                        backgroundColor: Colors.blue,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(25)),
+                      ),
+                      child: Text(
+                        'Edit Profile',
+                        style: TextStyle(fontSize: 20, color: Colors.white),
+                      ),
+                    ),
+                  ),
             ElevatedButton(
               onPressed: _deleteProfile,
               style: ElevatedButton.styleFrom(

@@ -1,5 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../pages/job_details_page.dart';
+import '../pages/edit_job_page.dart';
 
 class JobCard extends StatelessWidget {
   final String companyName;
@@ -7,6 +10,8 @@ class JobCard extends StatelessWidget {
   final String jobLocation;
   final String briefDescription;
   final String jobImage;
+  final String createdBy;
+  final String jobId;
 
   JobCard({
     required this.companyName,
@@ -14,10 +19,16 @@ class JobCard extends StatelessWidget {
     required this.jobLocation,
     required this.briefDescription,
     required this.jobImage,
+    required this.createdBy,
+    required this.jobId,
   });
+
+  String? get id => null;
 
   @override
   Widget build(BuildContext context) {
+    final currentUser = FirebaseAuth.instance.currentUser;
+
     return Padding(
       padding: const EdgeInsets.only(left: 25.0),
       child: ClipRRect(
@@ -29,7 +40,7 @@ class JobCard extends StatelessWidget {
             vertical: 10.0,
           ),
           child: SizedBox(
-            width: 275, // Set the width here
+            width: 275,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -81,7 +92,7 @@ class JobCard extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                           builder: (context) => JobDetailsPage(
-                            job: this, // Pass the current job object
+                            job: this,
                           ),
                         ),
                       );
@@ -95,11 +106,47 @@ class JobCard extends StatelessWidget {
                     ),
                   ),
                 ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    if (currentUser?.uid == createdBy)
+                      IconButton(
+                        icon: Icon(Icons.edit),
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => EditJobPage(
+                                job: this,
+                                jobId: jobId,
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    if (currentUser?.uid == createdBy)
+                      IconButton(
+                        icon: Icon(Icons.delete),
+                        onPressed: () {
+                          deletePost(jobId);
+                        },
+                      ),
+                  ],
+                ),
               ],
             ),
           ),
         ),
       ),
     );
+  }
+
+  void deletePost(String jobId) async {
+    try {
+      await FirebaseFirestore.instance.collection('jobs').doc(jobId).delete();
+      print('Post deleted successfully');
+    } catch (e) {
+      print('Error deleting post: $e');
+    }
   }
 }

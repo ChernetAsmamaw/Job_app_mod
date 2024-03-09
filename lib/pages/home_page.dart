@@ -137,13 +137,16 @@ class _HomePageState extends State<HomePage> {
                     final jobLocation = jobData['location'] ?? 'Job Location';
                     final briefDescription = jobData['description'] ?? 'Brief Description';
                     final jobImage = jobData['imageUrl'] ?? 'assets/mobile-gaming1.webp';
+                    final createdBy = jobData['createdBy'] ?? '';
 
                     return JobCard(
                       jobTitle: jobTitle,
                       companyName: companyName,
                       jobLocation: jobLocation,
-                      jobImage: jobImage, // Use the imageUrl from Firestore
+                      jobImage: jobImage,
                       briefDescription: briefDescription,
+                      createdBy: createdBy,
+                      jobId: jobData['id'],
                     );
                   },
                 ),
