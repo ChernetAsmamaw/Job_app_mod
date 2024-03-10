@@ -56,15 +56,14 @@ Future<void> _addPost() async {
   // Add the post data to the document
   await newJobDocRef.set(post.toMap());
 
-  _formKey.currentState?.reset();
+    _formKey.currentState?.reset();
 
-  // Navigate to the HomePage after posting the job
-  Navigator.pushAndRemoveUntil(
-    context,
-    MaterialPageRoute(builder: (context) => HomePage()),
-    (Route<dynamic> route) => false,
-  );
-}
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(builder: (context) => HomePage()),
+      (route) => false,
+    );
+  }
+
   Future<void> _signUserOut() async {
     await FirebaseAuth.instance.signOut();
   }
@@ -130,7 +129,6 @@ Future<void> _addPost() async {
                 },
               ),
               SizedBox(height: 30.0),
-              SizedBox(height: 16),
               Text(
                 'Company Name:',
                 style: TextStyle(

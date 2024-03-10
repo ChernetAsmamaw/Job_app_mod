@@ -28,8 +28,10 @@ class _ProfilePageState extends State<ProfilePage> {
     // Load user profile from Firestore or initialize a new one
     final userId = FirebaseAuth.instance.currentUser?.uid;
     if (userId != null) {
-      final snapshot =
-          await FirebaseFirestore.instance.collection('profiles').doc(userId).get();
+      final snapshot = await FirebaseFirestore.instance
+          .collection('profiles')
+          .doc(userId)
+          .get();
       if (snapshot.exists) {
         final data = snapshot.data() as Map<String, dynamic>;
         _userProfile = UserProfile.fromJson(data);
@@ -241,16 +243,6 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                     ),
                   ),
-            ElevatedButton(
-              onPressed: _deleteProfile,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.red,
-              ),
-              child: Text(
-                'Delete Profile',
-                style: TextStyle(fontSize: 16, color: Colors.white),
-              ),
-            ),
           ],
         ),
       ),

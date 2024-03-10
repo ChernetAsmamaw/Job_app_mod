@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'home_page.dart';
 
 class EditJobPage extends StatefulWidget {
   final String companyName;
@@ -69,7 +70,10 @@ class _EditJobPageState extends State<EditJobPage> {
           .doc(widget.jobId)
           .update(jobData);
 
-      Navigator.pop(context);
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (context) => HomePage()),
+        (route) => false,
+      );
     } else {
       print('Job ID is empty. Unable to update job.');
       // You can also show a SnackBar or an AlertDialog to inform the user about the issue

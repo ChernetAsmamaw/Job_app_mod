@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:job_application_portal/pages/home_page.dart';
 import 'edit_job_page.dart';
+import 'home_page.dart';
 
 class JobDetailsPage extends StatefulWidget {
   final String companyName;
@@ -29,21 +30,22 @@ class JobDetailsPage extends StatefulWidget {
 
 class _JobDetailsPageState extends State<JobDetailsPage> {
   Future<void> _deletePost(BuildContext context) async {
-  if (widget.jobId.isNotEmpty) {
-    await FirebaseFirestore.instance
-        .collection('jobs')
-        .doc(widget.jobId)
-        .delete();
+    if (widget.jobId.isNotEmpty) {
+      await FirebaseFirestore.instance
+          .collection('jobs')
+          .doc(widget.jobId)
+          .delete();
 
-    // Navigate to the homepage and remove all previous routes
-    Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(builder: (context) => HomePage()),
-      (route) => false,
-    );
-  } else {
-    print('Job ID is null. Unable to delete job.');
+      // Navigate to the homepage and remove all previous routes
+
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (context) => HomePage()),
+        (route) => false,
+      );
+    } else {
+      print('Job ID is null. Unable to delete job.');
+    }
   }
-}
 
   @override
   Widget build(BuildContext context) {
@@ -85,7 +87,8 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
                       context: context,
                       builder: (context) => AlertDialog(
                         title: Text('Delete Job'),
-                        content: Text('Are you sure you want to delete this job?'),
+                        content:
+                            Text('Are you sure you want to delete this job?'),
                         actions: [
                           TextButton(
                             onPressed: () => Navigator.pop(context),
