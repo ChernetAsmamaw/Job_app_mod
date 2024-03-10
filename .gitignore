@@ -15,6 +15,13 @@
 .pub-cache/
 .pub/
 .metadata
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.pub-cache/
+.pub/
+/build/
+node_modules/
 
 migrate_working_dir/
 
