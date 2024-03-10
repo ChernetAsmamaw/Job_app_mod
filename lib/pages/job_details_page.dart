@@ -37,7 +37,7 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
     // Navigate to the homepage and remove all previous routes
     Navigator.pushNamedAndRemoveUntil(
       context,
-      '/homepage', 
+      '/HomePage', 
       (route) => false,
     );
   } else {
