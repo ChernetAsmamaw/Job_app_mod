@@ -87,7 +87,7 @@ class _EditJobPageState extends State<EditJobPage> {
         title: Text('Edit Job'),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(50.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -126,12 +126,13 @@ class _EditJobPageState extends State<EditJobPage> {
                 labelText: 'Image URL',
               ),
             ),
-            SizedBox(height: 16.0),
+            SizedBox(height: 50.0),
             Center(
               child: ElevatedButton(
                 onPressed: _updateJob,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blue,
+                  padding: EdgeInsets.all(20),
                 ),
                 child: Text(
                   'Update Job',

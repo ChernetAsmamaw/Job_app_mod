@@ -96,7 +96,13 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
                           ),
                           ElevatedButton(
                             onPressed: () => _deletePost(context),
-                            child: Text('Delete'),
+                            style: ButtonStyle(
+                              backgroundColor:
+                                  MaterialStateProperty.all(Colors.red[200]),
+                            ),
+                            child: Text(
+                              'Delete',
+                            ),
                           ),
                         ],
                       ),
@@ -144,6 +150,12 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
                 },
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(Colors.blue),
+                  padding: MaterialStateProperty.all(
+                    EdgeInsets.symmetric(
+                      horizontal: 30,
+                      vertical: 20,
+                    ),
+                  ),
                 ),
                 child: Text(
                   'Apply Now',
