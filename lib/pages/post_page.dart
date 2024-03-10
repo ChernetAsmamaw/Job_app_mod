@@ -57,6 +57,11 @@ class _PostPageState extends State<PostPage> {
     await newJobDocRef.set(post.toMap());
 
     _formKey.currentState?.reset();
+
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(builder: (context) => HomePage()),
+      (route) => false,
+    );
   }
 
   Future<void> _signUserOut() async {
@@ -124,7 +129,6 @@ class _PostPageState extends State<PostPage> {
                 },
               ),
               SizedBox(height: 30.0),
-              SizedBox(height: 16),
               Text(
                 'Company Name:',
                 style: TextStyle(
