@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:job_application_portal/pages/home_page.dart';
 import 'edit_job_page.dart';
 import 'home_page.dart';
 

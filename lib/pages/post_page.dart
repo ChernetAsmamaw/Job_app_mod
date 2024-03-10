@@ -33,28 +33,28 @@ class _PostPageState extends State<PostPage> {
     super.dispose();
   }
 
-  Future<void> _addPost() async {
-    final isValid = _formKey.currentState?.validate() ?? false;
-    if (!isValid) return;
+Future<void> _addPost() async {
+  final isValid = _formKey.currentState?.validate() ?? false;
+  if (!isValid) return;
 
-    // Create a new document reference with an auto-generated ID
-    final newJobDocRef = FirebaseFirestore.instance.collection('jobs').doc();
+  // Create a new document reference with an auto-generated ID
+  final newJobDocRef = FirebaseFirestore.instance.collection('jobs').doc();
 
-    // Get the auto-generated ID
-    final newJobId = newJobDocRef.id;
+  // Get the auto-generated ID
+  final newJobId = newJobDocRef.id;
 
-    final post = Post(
-      title: _titleController.text,
-      companyName: _companyNameController.text,
-      location: _locationController.text,
-      description: _descriptionController.text,
-      imageUrl: 'assets/mobile-gaming1.webp',
-      createdBy: widget.user.uid,
-      jobId: newJobId, // Use the auto-generated jobId
-    );
+  final post = Post(
+    title: _titleController.text,
+    companyName: _companyNameController.text,
+    location: _locationController.text,
+    description: _descriptionController.text,
+    imageUrl: 'assets/mobile-gaming1.webp',
+    createdBy: widget.user.uid,
+    jobId: newJobId, // Use the auto-generated jobId
+  );
 
-    // Add the post data to the document
-    await newJobDocRef.set(post.toMap());
+  // Add the post data to the document
+  await newJobDocRef.set(post.toMap());
 
     _formKey.currentState?.reset();
 
