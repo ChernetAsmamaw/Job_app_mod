@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:job_application_portal/models/post.dart';
 import 'home_page.dart';
 import 'profile_page.dart';
@@ -36,18 +37,24 @@ class _PostPageState extends State<PostPage> {
     final isValid = _formKey.currentState?.validate() ?? false;
     if (!isValid) return;
 
+    // Create a new document reference with an auto-generated ID
+    final newJobDocRef = FirebaseFirestore.instance.collection('jobs').doc();
+
+    // Get the auto-generated ID
+    final newJobId = newJobDocRef.id;
+
     final post = Post(
       title: _titleController.text,
       companyName: _companyNameController.text,
       location: _locationController.text,
       description: _descriptionController.text,
       imageUrl: 'assets/mobile-gaming1.webp',
-      createdBy: widget.user.uid, // Add the user's ID
+      createdBy: widget.user.uid,
+      jobId: newJobId, // Use the auto-generated jobId
     );
 
-    // Add the post data to Firestore and get the document ID
-    final docRef = await FirebaseFirestore.instance.collection('jobs').add(post.toMap());
-    final docId = docRef.id; // Get the document ID
+    // Add the post data to the document
+    await newJobDocRef.set(post.toMap());
 
     _formKey.currentState?.reset();
   }
@@ -116,26 +123,7 @@ class _PostPageState extends State<PostPage> {
                   return null;
                 },
               ),
-                            SizedBox(height: 30.0),
-              Text(
-                'JobID:',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              TextFormField(
-                controller: _titleController,
-                decoration: InputDecoration(
-                  hintText: 'Enter JobID here',
-                ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter a JobID';
-                  }
-                  return null;
-                },
-              ),
+              SizedBox(height: 30.0),
               SizedBox(height: 16),
               Text(
                 'Company Name:',

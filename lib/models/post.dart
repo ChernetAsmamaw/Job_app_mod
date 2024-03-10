@@ -8,6 +8,7 @@ class Post {
   final String description;
   final String imageUrl;
   final String createdBy;
+  final String jobId; // Adding jobId parameter
 
   Post({
     this.id = '',
@@ -17,29 +18,32 @@ class Post {
     required this.description,
     required this.imageUrl,
     required this.createdBy,
+    required this.jobId, // Adding jobId parameter
   });
 
   factory Post.fromMap(Map<String, dynamic> data) {
     return Post(
-      id: data['id'] ?? '',
+      id: data['jobId'] ?? '',
       title: data['title'] ?? '',
       companyName: data['companyName'] ?? '',
       location: data['location'] ?? '',
       description: data['description'] ?? '',
       imageUrl: data['imageUrl'] ?? '',
       createdBy: data['createdBy'] ?? '',
+      jobId: data['jobId'] ?? '', // Adding jobId parameter
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
-      'id': id,
+      'id': jobId,
       'title': title,
       'companyName': companyName,
       'location': location,
       'description': description,
       'imageUrl': imageUrl,
       'createdBy': createdBy,
+      'jobId': jobId, 
     };
   }
 }
