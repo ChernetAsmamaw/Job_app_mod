@@ -127,9 +127,17 @@ class _EditJobPageState extends State<EditJobPage> {
               ),
             ),
             SizedBox(height: 16.0),
-            ElevatedButton(
-              onPressed: _updateJob,
-              child: Text('Update Job'),
+            Center(
+              child: ElevatedButton(
+                onPressed: _updateJob,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blue,
+                ),
+                child: Text(
+                  'Update Job',
+                  style: TextStyle(fontSize: 16, color: Colors.white),
+                ),
+              ),
             ),
           ],
         ),
