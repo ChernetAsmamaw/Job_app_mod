@@ -8,6 +8,14 @@
 .buildlog/
 .history
 .svn/
+.idea
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.pub-cache/
+.pub/
+.metadata
+
 migrate_working_dir/
 
 # IntelliJ related
@@ -30,6 +38,8 @@ migrate_working_dir/
 .pub-cache/
 .pub/
 /build/
+node_modules/
+
 
 # Symbolication related
 app.*.symbols
